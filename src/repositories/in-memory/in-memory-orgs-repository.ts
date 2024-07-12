@@ -1,10 +1,17 @@
 import { Prisma, Org } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 import { IOrgRepository } from "../orgs-repository";
-import { ResourceNotFoundError } from "../../use-cases/errors/resource-not-found-error";
 
 export class InMemoryOrgsRepository implements IOrgRepository {
   public items: Org[] = [];
+
+  async delete(id: string) {
+    const org = this.items.findIndex((item) => item.id === id);
+
+    if (org >= 0) {
+      this.items.splice(org, 1)[0];
+    }
+  }
 
   async findById(id: string) {
     const org = this.items.find((item) => item.id === id);

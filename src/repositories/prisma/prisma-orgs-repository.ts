@@ -3,6 +3,12 @@ import { IOrgRepository } from "../orgs-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaOrgsRepository implements IOrgRepository {
+  async delete(id: string) {
+    await prisma.org.delete({
+      where: { id },
+    });
+  }
+
   async findById(id: string) {
     const org = await prisma.org.findUnique({
       where: { id },
