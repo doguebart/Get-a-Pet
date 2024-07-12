@@ -1,7 +1,9 @@
-import { describe, beforeEach, afterEach, it, expect } from "vitest";
+import { describe, beforeEach, it, expect } from "vitest";
 import { InMemoryOrgsRepository } from "../../repositories/in-memory/in-memory-orgs-repository";
 import { RegisterOrgUseCase } from "./register";
 import { compare } from "bcryptjs";
+import { OrgEmailAlreadyExists } from "../errors/org-email-already-exists-error";
+import { OrgPhoneAlreadyExists } from "../errors/org-phone-already-exists-error";
 
 let orgsRegisterRepository: InMemoryOrgsRepository;
 let sut: RegisterOrgUseCase;
@@ -58,7 +60,7 @@ describe("Register Org Use Case", () => {
     await sut.execute({
       name: "getApet",
       description: "Some description",
-      phone: "11940028922",
+      phone: "11941028922",
       email: "getapet@gmail.com",
       password: "123456",
       zip_code: "06145-096",
@@ -79,6 +81,34 @@ describe("Register Org Use Case", () => {
         city: "Osasco",
         address: "Rua Mirante Salazar, 812",
       })
-    ).rejects.toBeInstanceOf(Error);
+    ).rejects.toBeInstanceOf(OrgEmailAlreadyExists);
+  });
+
+  it("should not be able to register with same phone", async () => {
+    await sut.execute({
+      name: "getApet",
+      description: "Some description",
+      phone: "11940028922",
+      email: "getapet@gmail.com",
+      password: "123456",
+      zip_code: "06145-096",
+      state: "São Paulo",
+      city: "Osasco",
+      address: "Rua Mirante Salazar, 812",
+    });
+
+    await expect(() =>
+      sut.execute({
+        name: "getApet",
+        description: "Some description",
+        phone: "11940028922",
+        email: "getapet2@gmail.com",
+        password: "123456",
+        zip_code: "06145-096",
+        state: "São Paulo",
+        city: "Osasco",
+        address: "Rua Mirante Salazar, 812",
+      })
+    ).rejects.toBeInstanceOf(OrgPhoneAlreadyExists);
   });
 });
