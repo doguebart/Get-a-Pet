@@ -1,19 +1,19 @@
 import { describe, beforeEach, it, expect } from "vitest";
 import { InMemoryOrgsRepository } from "../../repositories/in-memory/in-memory-orgs-repository";
-import { GetOrgByIdUseCase } from "./get-by-id";
 import { hash } from "bcryptjs";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { DeleteOrgUseCase } from "./delete";
 
 let orgsRepository: InMemoryOrgsRepository;
-let sut: GetOrgByIdUseCase;
+let sut: DeleteOrgUseCase;
 
-describe("Get Org By Id Use Case", () => {
+describe("Delete Org By Id Use Case", () => {
   beforeEach(() => {
     orgsRepository = new InMemoryOrgsRepository();
-    sut = new GetOrgByIdUseCase(orgsRepository);
+    sut = new DeleteOrgUseCase(orgsRepository);
   });
 
-  it("should be able to get a org by id", async () => {
+  it("should be able to delete a org by id", async () => {
     const createdOrg = await orgsRepository.create({
       name: "getApet",
       description: "Some description",
@@ -26,14 +26,16 @@ describe("Get Org By Id Use Case", () => {
       address: "Rua Mirante Salazar, 812",
     });
 
-    const { org } = await sut.execute({
+    await sut.execute({
       orgId: createdOrg.id,
     });
 
-    expect(org.name).toEqual("getApet");
+    const org = await orgsRepository.findById(createdOrg.id);
+
+    expect(org).toBeNull();
   });
 
-  it("should not be able to get a org with wrong id", async () => {
+  it("should not be able to delete a org with wrong id", async () => {
     await orgsRepository.create({
       name: "getApet",
       description: "Some description",

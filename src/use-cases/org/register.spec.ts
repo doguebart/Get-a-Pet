@@ -5,13 +5,13 @@ import { compare } from "bcryptjs";
 import { OrgEmailAlreadyExists } from "../errors/org-email-already-exists-error";
 import { OrgPhoneAlreadyExists } from "../errors/org-phone-already-exists-error";
 
-let orgsRegisterRepository: InMemoryOrgsRepository;
+let orgsRepository: InMemoryOrgsRepository;
 let sut: RegisterOrgUseCase;
 
 describe("Register Org Use Case", () => {
   beforeEach(() => {
-    orgsRegisterRepository = new InMemoryOrgsRepository();
-    sut = new RegisterOrgUseCase(orgsRegisterRepository);
+    orgsRepository = new InMemoryOrgsRepository();
+    sut = new RegisterOrgUseCase(orgsRepository);
   });
 
   it("should be able to register a org", async () => {
