@@ -1,8 +1,16 @@
-import { Org, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { IOrgRepository } from "../orgs-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaOrgsRepository implements IOrgRepository {
+  async findById(id: string) {
+    const org = await prisma.org.findUnique({
+      where: { id },
+    });
+
+    return org;
+  }
+
   async findByPhone(phone: string) {
     const org = await prisma.org.findUnique({
       where: { phone },
