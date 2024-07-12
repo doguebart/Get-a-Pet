@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsx watch src/server.ts"
+    "start:dev": "tsx watch src/server.ts",
+    "test": "vitest --watch run --dir src/use-cases"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,8 @@
     "prisma": "^5.16.2",
     "tsup": "^8.1.0",
     "tsx": "^4.16.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.2"
   },
   "dependencies": {
     "@prisma/client": "^5.16.2",
