@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeGetOrgByIdUseCase } from "../../../use-cases/factories/org/make-get-org-by-id-use-case";
+import { ResourceNotFoundError } from "../../../use-cases/errors/resource-not-found-error";
 
 export const getOrgById = async (
   request: FastifyRequest,
@@ -12,16 +13,24 @@ export const getOrgById = async (
 
   const { orgId } = getOrgByIdBodySchema.parse(request.params);
 
-  const getOrgByIdUseCase = makeGetOrgByIdUseCase();
+  try {
+    const getOrgByIdUseCase = makeGetOrgByIdUseCase();
 
-  const { org } = await getOrgByIdUseCase.execute({
-    orgId,
-  });
+    const { org } = await getOrgByIdUseCase.execute({
+      orgId,
+    });
 
-  return reply.status(200).send({
-    org: {
-      ...org,
-      password_hash: undefined,
-    },
-  });
+    return reply.status(200).send({
+      org: {
+        ...org,
+        password_hash: undefined,
+      },
+    });
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(404).send({ message: err.message });
+    }
+
+    throw err;
+  }
 };
