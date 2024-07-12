@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeRegisterUseCase } from "../../../use-cases/factories/org/make-register-use-case";
-import { UserAlreadyExistsError } from "../../../use-cases/errors/user-already-exists-error";
+import { OrgEmailAlreadyExists } from "../../../use-cases/errors/org-email-already-exists-error";
+import { OrgPhoneAlreadyExists } from "../../../use-cases/errors/org-phone-already-exists-error";
 
 export const register = async (
   request: FastifyRequest,
@@ -46,7 +47,11 @@ export const register = async (
       address,
     });
   } catch (err) {
-    if (err instanceof UserAlreadyExistsError) {
+    if (err instanceof OrgPhoneAlreadyExists) {
+      return reply.status(409).send({ message: err.message });
+    }
+
+    if (err instanceof OrgEmailAlreadyExists) {
       return reply.status(409).send({ message: err.message });
     }
 
