@@ -5,7 +5,7 @@
 - [x] Deve ser possível apagar uma ORG
 - [x] Deve ser possível atualizar uma ou mais informações de uma ORG
 - [ ] Deve ser possível realizar login como uma ORG
-- [ ] Deve ser possível cadastrar um pet
+- [x] Deve ser possível cadastrar um pet
 - [ ] Deve ser possível visualizar detalhes de um pet para adoção
 - [ ] Deve ser possível apagar um pet
 - [ ] Deve ser possível atualizar uma ou mais informações de um pet
