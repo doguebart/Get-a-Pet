@@ -34,6 +34,11 @@ model Org {
   @@map("orgs")
 }
 
+enum PetSpecie {
+  DOG
+  CAT
+}
+
 enum PetSize {
   SMALL
   MEDIUM
@@ -46,9 +51,9 @@ enum PetAge {
 }
 
 model Pet {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   name            String
-  specie          String
+  specie          PetSpecie
   size            PetSize
   age             PetAge
   characteristics String[]
