@@ -3,6 +3,13 @@ import { IOrgRepository } from "../orgs-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaOrgsRepository implements IOrgRepository {
+  async update(id: string, data: Prisma.OrgUpdateInput): Promise<void> {
+    await prisma.org.update({
+      where: { id },
+      data,
+    });
+  }
+
   async delete(id: string) {
     await prisma.org.delete({
       where: { id },

@@ -5,6 +5,15 @@ import { IOrgRepository } from "../orgs-repository";
 export class InMemoryOrgsRepository implements IOrgRepository {
   public items: Org[] = [];
 
+  async update(id: string, data: Prisma.OrgUpdateInput): Promise<void> {
+    const org = this.items.findIndex((item) => item.id === id);
+
+    if (org >= 0) {
+      const updatedOrg = { ...this.items[org], ...data };
+      this.items[org] = updatedOrg as Org;
+    }
+  }
+
   async delete(id: string) {
     const org = this.items.findIndex((item) => item.id === id);
 
