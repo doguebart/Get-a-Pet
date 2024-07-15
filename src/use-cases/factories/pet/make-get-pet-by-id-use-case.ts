@@ -3,7 +3,7 @@ import { GetPetByIdUseCase } from "../../pet/get-pet-by-id";
 
 export const makeGetPetByIdUseCase = () => {
   const petsRepository = new PrismaPetsRepository();
-  const registerUseCase = new GetPetByIdUseCase(petsRepository);
+  const getPetByIdUseCase = new GetPetByIdUseCase(petsRepository);
 
-  return registerUseCase;
+  return getPetByIdUseCase;
 };
