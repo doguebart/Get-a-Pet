@@ -33,10 +33,15 @@ describe("Register Org Use Case", () => {
       name: "Calabreso",
       size: "SMALL",
       age: "ADULT",
-      characteristics: ["Leal", "Sociável", "Energético", "Obediente"],
       specie: "DOG",
+      characteristics: ["Leal", "Sociável", "Energético", "Obediente"],
     });
 
     expect(pet.id).toEqual(expect.any(String));
+    expect(pet).toEqual(
+      expect.objectContaining({
+        name: "Calabreso",
+      })
+    );
   });
 });
