@@ -5,6 +5,16 @@ import { randomUUID } from "node:crypto";
 export class InMemoryPetsRepository implements IPetRepository {
   public items: Pet[] = [];
 
+  async save(pet: Pet) {
+    const petIndex = this.items.findIndex((item) => item.id === pet.id);
+
+    if (petIndex >= 0) {
+      this.items[petIndex] = pet;
+    }
+
+    return pet;
+  }
+
   async listAllOrgPets(id: string) {
     return this.items.filter((item) => item.orgId === id);
   }

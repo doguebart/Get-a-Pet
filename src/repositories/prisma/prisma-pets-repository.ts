@@ -3,6 +3,15 @@ import { IPetRepository } from "../pets-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaPetsRepository implements IPetRepository {
+  async save(data: Pet) {
+    const pet = await prisma.pet.update({
+      where: { id: data.id },
+      data,
+    });
+
+    return pet;
+  }
+
   async listAllOrgPets(id: string): Promise<Pet[] | null> {
     const pets = await prisma.pet.findMany({
       where: { orgId: id },
