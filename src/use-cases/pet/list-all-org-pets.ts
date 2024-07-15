@@ -11,7 +11,7 @@ interface ListPetsUseCaseResponse {
   pets: Pet[];
 }
 
-export class ListAllOrgPets {
+export class ListAllOrgPetsUseCase {
   constructor(
     private petsRepository: IPetRepository,
     private orgsRepository: IOrgRepository
