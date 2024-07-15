@@ -2,18 +2,18 @@ import { describe, beforeEach, it, expect } from "vitest";
 import { InMemoryOrgsRepository } from "../../repositories/in-memory/in-memory-orgs-repository";
 import { InMemoryPetsRepository } from "../../repositories/in-memory/in-memory-pets-repository";
 import { hash } from "bcryptjs";
-import { ListOrgPetsUseCase } from "./list-all-org-pets";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ListAllOrgPetsUseCase } from "./list-all-org-pets";
 
 let orgsRepository: InMemoryOrgsRepository;
 let petsRepository: InMemoryPetsRepository;
-let sut: ListOrgPetsUseCase;
+let sut: ListAllOrgPetsUseCase;
 
 describe("List All Org Pets Use Case", () => {
   beforeEach(() => {
     orgsRepository = new InMemoryOrgsRepository();
     petsRepository = new InMemoryPetsRepository();
-    sut = new ListOrgPetsUseCase(petsRepository, orgsRepository);
+    sut = new ListAllOrgPetsUseCase(petsRepository, orgsRepository);
   });
 
   it("should be able to list all org pets", async () => {
