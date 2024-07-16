@@ -4,6 +4,7 @@ import { getPetById } from "./get-by-id";
 import { listAllPets } from "./list-all";
 import { listAllOrgPets } from "./list-all-org-pets";
 import { setPetAdopted } from "./set-pet-adopted";
+import { deleteById } from "./delete";
 
 export const petRoutes = async (app: FastifyInstance) => {
   app.post("/pets", register);
@@ -11,4 +12,5 @@ export const petRoutes = async (app: FastifyInstance) => {
   app.get("/pets", listAllPets);
   app.get("/org/:orgId/pets", listAllOrgPets);
   app.patch("/pets/adopted/:petId", setPetAdopted);
+  app.delete("/pets/:petId", deleteById);
 };
