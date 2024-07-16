@@ -3,6 +3,16 @@ import { IPetRepository } from "../pets-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaPetsRepository implements IPetRepository {
+  async delete(id: string) {
+    const pet = await prisma.pet.delete({
+      where: {
+        id,
+      },
+    });
+
+    return pet;
+  }
+
   async save(data: Pet) {
     const pet = await prisma.pet.update({
       where: { id: data.id },
