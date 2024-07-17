@@ -6,13 +6,15 @@ import { listAllOrgPets } from "./list-all-org-pets";
 import { setPetAdopted } from "./set-pet-adopted";
 import { deleteById } from "./delete";
 import { update } from "./update";
+import { verifyJWT } from "../../middleware/verify-jwt";
 
 export const petRoutes = async (app: FastifyInstance) => {
-  app.post("/pets", register);
   app.get("/pets/:petId", getPetById);
   app.get("/pets", listAllPets);
   app.get("/org/:orgId/pets", listAllOrgPets);
-  app.patch("/pets/adopted/:petId", setPetAdopted);
-  app.delete("/pets/:petId", deleteById);
-  app.patch("/pets/:petId", update);
+
+  app.post("/pets", { onRequest: [verifyJWT] }, register);
+  app.patch("/pets/adopted/:petId", { onRequest: [verifyJWT] }, setPetAdopted);
+  app.delete("/pets/:petId", { onRequest: [verifyJWT] }, deleteById);
+  app.patch("/pets/:petId", { onRequest: [verifyJWT] }, update);
 };
