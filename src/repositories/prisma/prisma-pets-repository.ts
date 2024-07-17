@@ -3,6 +3,15 @@ import { IPetRepository } from "../pets-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PrismaPetsRepository implements IPetRepository {
+  async update(id: string, data: Prisma.PetUpdateInput) {
+    const pet = await prisma.pet.update({
+      where: { id },
+      data,
+    });
+
+    return pet;
+  }
+
   async delete(id: string) {
     const pet = await prisma.pet.delete({
       where: {
@@ -22,16 +31,18 @@ export class PrismaPetsRepository implements IPetRepository {
     return pet;
   }
 
-  async listAllOrgPets(id: string): Promise<Pet[] | null> {
+  async listAllOrgPets(id: string) {
     const pets = await prisma.pet.findMany({
-      where: { orgId: id },
+      where: { orgId: id, adopted_at: null },
     });
 
     return pets;
   }
 
-  async listAll(): Promise<Pet[] | null> {
-    const pets = await prisma.pet.findMany();
+  async listAll() {
+    const pets = await prisma.pet.findMany({
+      where: { adopted_at: null },
+    });
 
     return pets;
   }
