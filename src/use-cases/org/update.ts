@@ -1,3 +1,4 @@
+import { Org } from "@prisma/client";
 import { IOrgRepository } from "../../repositories/orgs-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
@@ -23,13 +24,13 @@ export class UpdateOrgUseCase {
     city,
     address,
   }: UpdateOrgUseCaseRequest) {
-    const org = await this.orgsRepository.findById(orgId);
+    const checkIfOrgExists = await this.orgsRepository.findById(orgId);
 
-    if (!org) {
+    if (!checkIfOrgExists) {
       throw new ResourceNotFoundError();
     }
 
-    await this.orgsRepository.update(orgId, {
+    const org = await this.orgsRepository.update(orgId, {
       name,
       description,
       zip_code,
@@ -37,5 +38,7 @@ export class UpdateOrgUseCase {
       city,
       address,
     });
+
+    return { org };
   }
 }
