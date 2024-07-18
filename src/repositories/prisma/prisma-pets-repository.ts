@@ -31,17 +31,32 @@ export class PrismaPetsRepository implements IPetRepository {
     return pet;
   }
 
-  async listAllOrgPets(id: string) {
+  async listAllOrgPets(id: string, query?: string, page?: number) {
     const pets = await prisma.pet.findMany({
-      where: { orgId: id, adopted_at: null },
+      where: {
+        orgId: id,
+        name: {
+          contains: query ?? undefined,
+        },
+        adopted_at: null,
+      },
+      take: 12,
+      skip: ((page ?? 1) - 1) * 12,
     });
 
     return pets;
   }
 
-  async listAll() {
+  async listAll(query?: string, page?: number) {
     const pets = await prisma.pet.findMany({
-      where: { adopted_at: null },
+      where: {
+        name: {
+          contains: query ?? undefined,
+        },
+        adopted_at: null,
+      },
+      take: 12,
+      skip: ((page ?? 1) - 1) * 12,
     });
 
     return pets;

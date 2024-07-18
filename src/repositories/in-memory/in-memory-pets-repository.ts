@@ -36,12 +36,30 @@ export class InMemoryPetsRepository implements IPetRepository {
     return pet;
   }
 
-  async listAllOrgPets(id: string) {
-    return this.items.filter((item) => item.orgId === id);
+  async listAllOrgPets(id: string, query?: string, page: number = 1) {
+    let filteredItems = this.items.filter((item) => item.orgId === id);
+
+    if (query) {
+      filteredItems = filteredItems.filter((item) => item.name.includes(query));
+    }
+
+    const startIndex = (page - 1) * 12;
+    const endIndex = startIndex + 12;
+
+    return filteredItems.slice(startIndex, endIndex);
   }
 
-  async listAll() {
-    return this.items;
+  async listAll(query?: string, page: number = 1) {
+    let filteredItems = this.items;
+
+    if (query) {
+      filteredItems = filteredItems.filter((item) => item.name.includes(query));
+    }
+
+    const startIndex = (page - 1) * 12;
+    const endIndex = startIndex + 12;
+
+    return filteredItems.slice(startIndex, endIndex);
   }
 
   async findById(id: string) {
