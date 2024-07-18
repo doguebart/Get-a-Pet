@@ -5,6 +5,8 @@ import { IOrgRepository } from "../../repositories/orgs-repository";
 
 interface ListPetsUseCaseRequest {
   orgId: string;
+  query?: string;
+  page?: number;
 }
 
 interface ListPetsUseCaseResponse {
@@ -19,6 +21,8 @@ export class ListAllOrgPetsUseCase {
 
   async execute({
     orgId,
+    query,
+    page = 1,
   }: ListPetsUseCaseRequest): Promise<ListPetsUseCaseResponse> {
     const org = await this.orgsRepository.findById(orgId);
 
@@ -26,7 +30,7 @@ export class ListAllOrgPetsUseCase {
       throw new ResourceNotFoundError();
     }
 
-    const pets = await this.petsRepository.listAllOrgPets(orgId);
+    const pets = await this.petsRepository.listAllOrgPets(orgId, query, page);
 
     if (!pets) {
       throw new ResourceNotFoundError();
