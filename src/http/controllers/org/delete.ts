@@ -1,23 +1,27 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { z } from "zod";
 import { makeDeleteOrgUseCase } from "../../../use-cases/factories/org/make-delete-org-use-case";
 import { ResourceNotFoundError } from "../../../use-cases/errors/resource-not-found-error";
+import { z } from "zod";
 
 export const deleteOrg = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  const deleteBodySchema = z.object({
+  const getOrgByIdBodySchema = z.object({
     orgId: z.string().uuid(),
   });
 
-  const { orgId } = deleteBodySchema.parse(request.params);
+  const { orgId } = getOrgByIdBodySchema.parse(request.params);
+
+  if (orgId !== request.user.sub) {
+    return reply.status(401).send({ message: "Unauthorized" });
+  }
 
   try {
     const deleteOrgUseCase = makeDeleteOrgUseCase();
 
     await deleteOrgUseCase.execute({
-      orgId,
+      orgId: request.user.sub,
     });
   } catch (err) {
     if (err instanceof ResourceNotFoundError) {

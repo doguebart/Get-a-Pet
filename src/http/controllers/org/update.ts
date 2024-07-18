@@ -7,7 +7,7 @@ export const updateOrg = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  const deleteOrgParamsSchema = z.object({
+  const getOrgByIdBodySchema = z.object({
     orgId: z.string().uuid(),
   });
 
@@ -19,16 +19,20 @@ export const updateOrg = async (
     city: z.string(),
     address: z.string(),
   });
+  const { orgId } = getOrgByIdBodySchema.parse(request.params);
 
-  const { orgId } = deleteOrgParamsSchema.parse(request.params);
   const { name, description, zip_code, state, city, address } =
     deleteOrgBodySchema.parse(request.body);
+
+  if (orgId !== request.user.sub) {
+    return reply.status(401).send({ message: "Unauthorized" });
+  }
 
   try {
     const updateOrgUseCase = makeUpdateOrgUseCase();
 
     await updateOrgUseCase.execute({
-      orgId,
+      orgId: request.user.sub,
       name,
       description,
       zip_code,
