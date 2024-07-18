@@ -11,12 +11,18 @@ export const listAllOrgPets = async (
     orgId: z.string().uuid(),
   });
 
+  const searchPetsQuerySchema = z.object({
+    query: z.string().optional(),
+    page: z.coerce.number().min(1).default(1).optional(),
+  });
+
   const { orgId } = listAllOrgPetsParamsSchema.parse(request.params);
+  const { query, page } = searchPetsQuerySchema.parse(request.query);
 
   try {
     const listAllOrgPets = makeListAllOrgPetsUseCase();
 
-    const { pets } = await listAllOrgPets.execute({ orgId });
+    const { pets } = await listAllOrgPets.execute({ orgId, query, page });
 
     return reply.status(200).send({
       pets,
