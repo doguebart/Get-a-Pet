@@ -48,7 +48,7 @@ describe("List All Pets Use Case", () => {
 
     const { pets } = await sut.execute();
 
-    expect(pets).toEqual(expect.any(Array));
-    expect(pets).length(2);
+    expect(pets).toHaveLength(1);
+    expect(pets).toEqual([expect.objectContaining({ name: "Mussarelo" })]);
   });
 });

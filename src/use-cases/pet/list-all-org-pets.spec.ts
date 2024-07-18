@@ -130,4 +130,50 @@ describe("List All Org Pets Use Case", () => {
       sut.execute({ orgId: "non-existing-id" })
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
+
+  it("should be able to search a org pet by name", async () => {
+    const org = await orgsRepository.create({
+      name: "getApet",
+      description: "Some description",
+      phone: "11940028922",
+      email: "getapet@gmail.com",
+      password_hash: await hash("123456", 6),
+      zip_code: "06145-096",
+      state: "São Paulo",
+      city: "Osasco",
+      address: "Rua Mirante Salazar, 812",
+    });
+
+    await petsRepository.create({
+      orgId: org.id,
+      name: "Calabreso",
+      size: "MEDIUM",
+      age: "PUPPY",
+      specie: "DOG",
+      characteristics: ["Leal", "Sociável", "Energético", "Obediente"],
+    });
+
+    await petsRepository.create({
+      orgId: org.id,
+      name: "Mussarelo",
+      size: "SMALL",
+      age: "ADULT",
+      specie: "CAT",
+      characteristics: ["Leal", "Sociável", "Energético", "Obediente"],
+    });
+
+    const { pets } = await sut.execute({
+      orgId: org.id,
+      page: 1,
+      query: "Calabreso",
+    });
+
+    expect(pets).toEqual(expect.any(Array));
+    expect(pets).toHaveLength(1);
+    expect(pets).toEqual([
+      expect.objectContaining({
+        name: "Calabreso",
+      }),
+    ]);
+  });
 });
